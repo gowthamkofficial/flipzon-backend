@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const { Failure } = require("./response.model");
 const middleware = (schema, property) => {
   return (req, res, next) => {
     const { error } = schema.validate(req[property]);
@@ -8,7 +8,7 @@ const middleware = (schema, property) => {
     } else {
       const { details } = error;
       const message = details.map((i) => i.message).join(",");
-      res.status(422).json(new (400, "Failed", message, ''));
+      res.status(400).json(new Failure(message, ''));
     }
   };
 };
